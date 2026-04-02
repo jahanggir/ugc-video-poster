@@ -206,6 +206,13 @@ export default function VideoThumbnailGenerator() {
     setThumbnail(canvas.toDataURL(format, q));
   }, [size, format, quality]);
 
+  const thumbnailExistsRef = useRef(false);
+  useEffect(() => { thumbnailExistsRef.current = !!thumbnail; }, [thumbnail]);
+  // Re-capture automatically when format/quality/size change so download is always current
+  useEffect(() => {
+    if (thumbnailExistsRef.current) captureThumbnail();
+  }, [captureThumbnail]); // captureThumbnail identity changes when format, quality, or size change
+
   const downloadThumbnail = useCallback(() => {
     if (!thumbnail) return;
     const mime = thumbnail.split(";")[0].split(":")[1];
