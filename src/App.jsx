@@ -208,7 +208,8 @@ export default function VideoThumbnailGenerator() {
 
   const downloadThumbnail = useCallback(() => {
     if (!thumbnail) return;
-    const ext = format === "image/png" ? "png" : format === "image/jpeg" ? "jpg" : "webp";
+    const mime = thumbnail.split(";")[0].split(":")[1];
+    const ext = mime === "image/jpeg" ? "jpg" : mime === "image/webp" ? "webp" : "png";
     const safeName = sanitizeFilename(videoName || "thumbnail");
     const link = document.createElement("a");
     link.href = thumbnail;
